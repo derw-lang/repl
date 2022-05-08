@@ -1,0 +1,20 @@
+import "./Repl_kernel" as Kernel exposing ( RunningProgram )
+
+exposing (RunningProgram, Program, program)
+exposing (View, Question, Statement, End)
+
+type View msg =
+    Question { prompt: string,
+        onInput: (string -> msg) }
+    | Statement { text: string }
+    | End
+
+type alias Program model msg = {
+    initialModel: model,
+    update: msg -> model -> (msg -> void) -> model,
+    view: model -> View msg
+}
+
+program: Program model msg -> RunningProgram model msg
+program program_ =
+    Kernel.program program_
