@@ -1,4 +1,4 @@
-import "../src/Repl" exposing (RunningProgram, Program, View, Question, End, Statement, program)
+import "../../src/Repl" exposing (RunningProgram, Program, View, Question, End, Statement, program)
 
 type Page =
     Intro

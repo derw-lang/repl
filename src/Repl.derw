@@ -1,7 +1,13 @@
-import "./Repl_kernel" as Kernel exposing ( RunningProgram )
-
+import "./Repl_kernel" as Kernel
+import readline
 exposing (RunningProgram, Program, program)
+exposing (ReadlineInstance)
 exposing (View, Question, Statement, End)
+exposing (view)
+
+type alias ReadlineInstance = {
+    instance: readline.Interface
+}
 
 type View msg =
     Question { prompt: string,
@@ -14,6 +20,30 @@ type alias Program model msg = {
     update: msg -> model -> (msg -> void) -> model,
     view: model -> View msg
 }
+
+type alias RunningProgram model msg = {
+    program: Program model msg,
+    listener: msg -> void
+}
+
+view: ReadlineInstance -> (model -> View msg) -> model -> (msg -> void) -> void
+view instance viewer model listener =
+    let
+        viewed: View msg
+        viewed =
+            viewer model
+    in
+        case viewed of
+            Statement { text } ->
+                globalThis.console.log text
+            Question { prompt, onInput } ->
+                question instance prompt (\answer -> listener (onInput answer))
+            End ->
+                instance.instance.close()
+
+question: ReadlineInstance -> string -> (string -> void) -> void
+question instance text onInput =
+    instance.instance.question text onInput
 
 program: Program model msg -> RunningProgram model msg
 program program_ =

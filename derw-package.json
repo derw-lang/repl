@@ -1,5 +1,7 @@
 {
     "name": "repl",
     "exposing": [],
-    "dependencies": {}
+    "dependencies": {
+        "derw-lang/loop": "main"
+    }
 }
